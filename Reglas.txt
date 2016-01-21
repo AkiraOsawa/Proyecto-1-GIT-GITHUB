@@ -1,0 +1,18 @@
+La forma más fácil y simple de hacer esto es crear un archivo llamado .gitignore en el directorio raíz de tu proyecto. Los archivos que incluyas aquí serán ignorados en todos los subdirectorios de tu proyecto, a menos que algún subdirectorio incluya su propio .gitignore. La ventaja de esto es que tienes un solo lugar donde puedes configurar todos los archivos a ignorar en el proyecto, a diferencia de la opción svn:ignore de SVN que tiene que ser configurada individualmente para cada carpeta. Además, el archivo .gitignore puede estar a su vez incluído en el repositorio.
+Veamos un .gitignore básico:
+$ cat .gitignore
+
+# Podemos especificar archivos individuales
+.DS_Store
+
+# O usar comodines
+*~
+*.swp
+
+# También es posible ignorar todos los subdirectorios y archivos en un directorio determinado
+tmp/**/* 
+Por supuesto, esto puede complicarse bastante. Puedes incluir excepciones a reglas existentes comenzando una línea con !. Puedes ver un ejemplo en GitHub guide on ignores.
+Hay dos cosas que debes tener en cuenta cuando ignoras archivos: Primero, si un archivo ya está siendo versionado por Git, agregar dicho archivo a .gitignore no hará que Git deje de observarlo. En este caso necesitarás ejecutar git rm --cached <file> para conservar el archivo y luego ignorarlo. En segundo lugar, los directorios vacíos no son tenidos en cuenta por Git. Si quieres que Git tenga en cuenta a un directorio aún cuando éste está vacío, debes colocar algo dentro de él. Normalmente con sólo ejecutar touch .gitignore es suficiente para lograr que Git tenga en cuenta a dicho directorio.
+También puedes abrir $GIT_DIR/info/exclude ($GIT_DIR es normalmente tu directorio .git) y editarlo. El problema es que estos cambios no formarán parte del repositorio, por lo tanto sólo debes usar esta opción si tienes algunos archivos personales que no quieres compartir con otros en el mismo proyecto.
+La última opción para ignorar archivos es configurar la opción core.excludesfiles en el archivo de configuración de Git. Puedes configurar un archivo .gitignore en tu directorio HOME y luego hacer que este .gitignore funcione en todos tus repositorios ejecutando el siguiente comando:
+git config --global core.excludesfile ~/.gitignore
